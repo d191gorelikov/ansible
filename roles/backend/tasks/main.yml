@@ -1,0 +1,73 @@
+---
+# tasks file for backend
+# Установка JDK
+#
+- name: Update cache
+  become: yes
+  apt:
+    update_cache: yes
+- name: Install openjdk-16-jdk
+  apt:
+    name: openjdk-16-jdk
+    state: present
+    update_cache: yes
+
+
+- name: Install Python3-lxml
+  apt:
+    name: python3-lxml
+    state: present
+    update_cache: yes  
+#Создание сервисного пользователя    
+- name: Create service user
+  become: yes
+  user:
+    name: backend
+    shell: /bin/bash
+    state: present
+
+
+
+    #- name: Download backend artifacts from Nexus
+    #unarchive:
+    #src: "{{nexus_url}}"
+    #dest: /opt/sausage-store/bin/sausage-store.jar
+    #mode: '0644'
+
+
+- name: Download artifact
+  maven_artifact:
+    dest: " /opt/sausage-store/bin/"
+    repository_url: "{{ nexus_url }}"
+    extension: jar
+    group_id: "com.yandex.practicum.devops"
+    artifact_id: "sausage-store"
+    version: "{{ version }}"
+    username: "{{ user_nexus }}"
+    password: "{{ pass_nexus }}"
+
+- name: Create directory for frontend files
+  file:
+    path: /opt/sausage-store/bin/sausage-store.jar
+    state: file
+    owner: backend
+    group: backend    
+
+- name: Create systemd unit for service
+  template:
+    src: templates/backend.service
+    dest: /etc/systemd/system/backend.service
+    mode: '0644'
+    
+
+- name: Reload systemd manager configuration
+  command: systemctl daemon-reload
+  become: true
+   
+    
+- name: Start backend service
+  become: yes
+  service:
+    name: backend
+    state: started
+    enabled: yes

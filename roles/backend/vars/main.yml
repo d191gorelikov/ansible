@@ -1,0 +1,11 @@
+---
+# vars file for backend
+#
+#
+nexus_url: "https://nexus.praktikum-services.tech/repository/std-ext-007-22-backend2"
+
+user_nexus: "std-ext-007-22"
+
+pass_nexus: "9pur2Q39"
+
+version: "1.0.1418360"

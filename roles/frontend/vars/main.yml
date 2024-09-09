@@ -1,0 +1,8 @@
+---
+# vars file for frontend
+nexus_link: "https://nexus.praktikum-services.tech/repository/std-ext-007-22-frontend/1.0.1419129/sausage-store-1.0.1419129.tar.gz"
+
+user_nexus: "std-ext-007-22"
+
+pass_nexus: "9pur2Q39"
+

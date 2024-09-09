@@ -1,0 +1,67 @@
+---
+# tasks file for frontend
+
+- name: Install nodejs
+  become: yes
+  apt:
+    name: nodejs
+    state: present
+    update_cache: yes
+
+- name: Install npm
+  become: yes
+  apt:
+    name: npm
+    state: present
+
+- name: Install and configure Nginx
+  become: yes
+  apt:
+    name: nginx
+    state: latest    
+
+- name: Create service user
+  become: yes
+  user:
+    name: www-data
+    state: present
+
+- name: Create directory /var/www-data
+  become: yes
+  file:
+    path: /var/www-data/dist
+    state: directory
+    mode: '0755'
+    owner: www-data
+    group: www-data
+
+
+- name: Download artifact from Nexus
+  command: curl -u "{{ user_nexus }}:{{ pass_nexus }}" "{{ nexus_link }}" -o /var/www-data/frontend.tar.gz
+
+- name: Extract frontend archive
+  unarchive:
+    src: /var/www-data/frontend.tar.gz
+    dest: /var/www-data/dist/
+    remote_src: yes
+    
+
+- name: Create systemd unit for service
+  become: yes
+  template:
+    src: templates/frontendnew
+    dest: /etc/nginx/sites-available/default
+    mode: '0644'
+
+- name: Enable Nginx site
+  file:
+    src: /etc/nginx/sites-available/default
+    dest: /etc/nginx/sites-enabled/default
+    state: link
+  become: yes    
+
+- name: Restart Nginx
+  service:
+    name: nginx
+    state: restarted
+  become: yes

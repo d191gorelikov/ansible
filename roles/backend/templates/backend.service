@@ -1,0 +1,13 @@
+[Unit]
+Description=Backend Mock Service
+
+[Service]
+Type=exec
+User=backend
+Group=backend
+Environment=LOG_PATH=/var/sausage-store/logs
+Environment='REPORT_PATH=/var/sausage-store/reports'
+ExecStart=/usr/bin/java -Xrs -jar /opt/sausage-store/bin/sausage-store.jar
+[Install]
+WantedBy=multi-user.target
+
