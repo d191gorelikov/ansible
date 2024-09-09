@@ -1,4 +1,4 @@
 Ansible-проект для установки зависимостей для frontend и backend и запуска сервиса на виртуальной машине Yandex Cloud
 
 Скриншот полного выполнения playbook`а 
-![image](/uploads/b526693def3f48244b3a9ed39f94f121/image.png)
+![image](https://github.com/user-attachments/assets/a80e3939-2bc8-40be-b7b6-6bcb1457e21b)
